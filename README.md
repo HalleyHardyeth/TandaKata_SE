@@ -1,20 +1,20 @@
 # Workflow
 
-### Pull dari Branch main Terlebih Dahulu
+### 1. Pull dari Branch main Terlebih Dahulu
 Sebelum push, pastikan kamu sync dengan branch main terbaru:
 git pull origin main
 
-### Buat Branch Baru
+### 2. Buat Branch Baru
 git checkout -b nama-fitur
 
-### Lakukan Perubahan & Commit
+### 3. Lakukan Perubahan & Commit
 git add .
 git commit -m "Deskripsi singkat tentang perubahan yang kamu buat"
 
-### Push ke GitHub
+### 4. Push ke GitHub
 git push origin nama-fitur
 
-### Buat Pull Request (PR)
+### 5. Buat Pull Request (PR)
 - Masuk ke GitHub repo
 - Akan muncul tombol “Compare & pull request”
 - Beri deskripsi singkat
