@@ -1,16 +1,34 @@
-# tanda_kata
+**Workflow
 
-A new Flutter project.
+**Pull dari Branch main Terlebih Dahulu
+Sebelum push, pastikan kamu sync dengan branch main terbaru:
+git pull origin main
 
-## Getting Started
+**Buat Branch Baru
+git checkout -b nama-fitur
 
-This project is a starting point for a Flutter application.
+**Lakukan Perubahan & Commit
+git add .
+git commit -m "Deskripsi singkat tentang perubahan yang kamu buat"
 
-A few resources to get you started if this is your first Flutter project:
+**Push ke GitHub
+git push origin nama-fitur
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+**Buat Pull Request (PR)
+- Masuk ke GitHub repo
+- Akan muncul tombol “Compare & pull request”
+- Beri deskripsi singkat
+- Pilih reviewers
+- Tunggu approval dari anggota tim lain sebelum di-merge ke main
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Tips Commit Message
+Gunakan bahasa yang jelas dan ringkas
+Contoh:
+- Menambahkan fitur pencarian
+- Fix bug input kutipan
+- Update tampilan home page
+
+**Penting 
+- Setiap fitur harus dibuat di branch terpisah, bukan langsung di main.
+- Jangan push langsung ke branch main.
+- Selalu gunakan pull request.
