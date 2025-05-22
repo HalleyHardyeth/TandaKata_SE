@@ -36,6 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
+  flip_card: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -60,9 +61,34 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/Alphabet tanda kata/A.jpg
+    - assets/Alphabet tanda kata/B.jpg
+    - assets/Alphabet tanda kata/C.jpg
+    - assets/Alphabet tanda kata/D.jpg
+    - assets/Alphabet tanda kata/E.jpg
+    - assets/Alphabet tanda kata/F.jpg
+    - assets/Alphabet tanda kata/G.jpg
+    - assets/Alphabet tanda kata/H.jpg
+    - assets/Alphabet tanda kata/I.jpg
+    - assets/Alphabet tanda kata/J.jpg
+    - assets/Alphabet tanda kata/K.jpg
+    - assets/Alphabet tanda kata/L.jpg
+    - assets/Alphabet tanda kata/M.jpg
+    - assets/Alphabet tanda kata/N.jpg
+    - assets/Alphabet tanda kata/O.jpg
+    - assets/Alphabet tanda kata/P.jpg
+    - assets/Alphabet tanda kata/Q.jpg
+    - assets/Alphabet tanda kata/R.jpg
+    - assets/Alphabet tanda kata/S.jpg
+    - assets/Alphabet tanda kata/T.jpg
+    - assets/Alphabet tanda kata/U.jpg
+    - assets/Alphabet tanda kata/V.jpg
+    - assets/Alphabet tanda kata/W.jpg
+    - assets/Alphabet tanda kata/X.jpg
+    - assets/Alphabet tanda kata/Y.jpg
+    - assets/Alphabet tanda kata/Z.jpg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
