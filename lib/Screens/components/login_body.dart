@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:tanda_kata/Screens/Home/home.dart';
 import 'package:tanda_kata/Screens/SignUp/signUp_screen.dart';
 import 'package:tanda_kata/color.dart';
 
@@ -113,7 +114,12 @@ class _LoginBodyState extends State<LoginBody> {
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Home()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
