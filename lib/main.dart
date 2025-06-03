@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tanda_kata/Screens/StudyMaterial/studyMaterial_screen.dart';
 import 'package:tanda_kata/Screens/Welcome/welcome_screen.dart';
 import 'package:tanda_kata/color.dart';
 
