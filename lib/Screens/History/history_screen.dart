@@ -1,43 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:tanda_kata/Screens/History/history_item.dart';
-import 'package:tanda_kata/color.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tanda_kata/Screens/History/history_store.dart';
+import 'package:tanda_kata/Screens/History/user_session.dart';
+import 'package:tanda_kata/Screens/Home/home.dart';
+import 'package:tanda_kata/color.dart';
 
-class HistoryPage extends StatelessWidget {
-  const HistoryPage({super.key});
+class HistoryScreen extends StatelessWidget {
+  const HistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<HistoryItem> historyItems = [
-      HistoryItem(
-        title: 'Topic A',
-        item: 'Quiz',
-        imagePath: '',
-      ),
-      HistoryItem(
-        title: 'Topic B',
-        item: 'Course',
-        imagePath: '',
-      ),
-    ];
+    final userId = UserSession().userId ?? "guest";
+    final historyItems = HistoryStore.getHistory(userId);
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => const Home()));
           },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
         ),
         title: Text(
           'Learning History',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(
@@ -54,43 +42,34 @@ class HistoryPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 80,
-                    height: 80, // This will now be respected
+                    width: 100,
+                    height: 70,
                     decoration: BoxDecoration(
                       color: grey,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: item.imagePath.isNotEmpty
-                        ? Image.asset(item.imagePath, fit: BoxFit.cover)
-                        : const SizedBox(), // fallback if image is empty
+                        ? Image.network(item.imagePath, fit: BoxFit.cover)
+                        : const SizedBox(),
                   ),
                   const SizedBox(width: 12),
                   SizedBox(
+                    width: 230,
                     height: 80,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          item.title,
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          item.item,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                        Flexible(
+                          child: Text(
+                            item.title,
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
+                            ),
                           ),
                         ),
                       ],

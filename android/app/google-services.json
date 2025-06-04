@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "263394333121",
+    "project_id": "tanda-kata",
+    "storage_bucket": "tanda-kata.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:263394333121:android:c812aed802d83217c59f40",
+        "android_client_info": {
+          "package_name": "com.example.tanda_kata"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcjQQBSoEq70LeKlUfMj8JsBMpUgi1o7U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
