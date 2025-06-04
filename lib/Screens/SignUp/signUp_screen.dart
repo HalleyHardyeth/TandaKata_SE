@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tanda_kata/Screens/components/signUp_body.dart';
+import 'package:tanda_kata/Screens/components/signup_body.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
