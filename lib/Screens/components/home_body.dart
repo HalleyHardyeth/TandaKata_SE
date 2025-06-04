@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:tanda_kata/Screens/Flashcard/flashcard_screen.dart';
+import 'package:tanda_kata/Screens/History/history_screen.dart';
+import 'package:tanda_kata/Screens/Home/home.dart';
+import 'package:tanda_kata/Screens/Profile/profile_screen.dart';
 import 'package:tanda_kata/Screens/StudyMaterial/studyMaterial_screen.dart';
 import 'package:tanda_kata/color.dart';
 
-class HomeBody extends StatelessWidget {
+class HomeBody extends StatefulWidget {
   const HomeBody({super.key});
+
+  @override
+  State<HomeBody> createState() => _HomeBodyState();
+}
+
+class _HomeBodyState extends State<HomeBody> {
+  final int _currIdx = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +165,11 @@ class HomeBody extends StatelessWidget {
                 const SizedBox(height: 16),
                 GestureDetector(
                   onTap: () {
-                    // TODO: Navigasi ke Intermediate Course
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const StudymaterialScreen()),
+                    );
                   },
                   child: Container(
                     width: double.infinity,
@@ -166,7 +181,7 @@ class HomeBody extends StatelessWidget {
                     ),
                     child: const Center(
                       child: Text(
-                        'Sign Language\nIntermediate',
+                        'Sign Language Intermediate',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -182,74 +197,43 @@ class HomeBody extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // TODO: Navigasi ke Flashcard
-                      },
-                      child: Container(
-                        width: 165,
-                        height: 205,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: highlighted,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/flashcard.png',
-                              height: 100,
-                            ),
-                            const SizedBox(height: 25),
-                            const Text(
-                              'Flashcard',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const FlashcardScreen(), // ganti dengan nama file yang sesuai
                       ),
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 180,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      color: highlighted,
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        // TODO: Navigasi ke Quiz
-                      },
-                      child: Container(
-                        width: 165,
-                        height: 205,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: highlighted,
-                          borderRadius: BorderRadius.circular(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/flashcard.png',
+                          height: 100,
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/quiz.png',
-                              height: 120,
-                            ),
-                            const SizedBox(height: 10),
-                            const Text(
-                              'Quiz',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(height: 15),
+                        const Text(
+                          'Flashcard',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 70),
               ],
@@ -265,12 +249,56 @@ class HomeBody extends StatelessWidget {
                 color: const Color(0xFF2D8374), // hijau dari gambar
                 borderRadius: BorderRadius.circular(40),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Icon(Icons.home, color: Colors.white, size: 30),
-                  Icon(Icons.history, color: Colors.grey, size: 30),
-                  Icon(Icons.person, color: Colors.grey, size: 30),
+                  IconButton(
+                    icon: Icon(
+                      Icons.home,
+                      color: _currIdx == 0 ? Colors.white : Colors.grey,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      if (_currIdx != 0) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                        );
+                      }
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.history,
+                      color: _currIdx == 1 ? Colors.white : Colors.grey,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      if (_currIdx != 1) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HistoryScreen()),
+                        );
+                      }
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.person,
+                      color: _currIdx == 2 ? Colors.white : Colors.grey,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      if (_currIdx != 2) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ProfileScreen()),
+                        );
+                      }
+                    },
+                  )
                 ],
               ),
             ),
