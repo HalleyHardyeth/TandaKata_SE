@@ -32,6 +32,7 @@ class _StudymaterialScreenState extends State<StudymaterialScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text('Sign Language Basic'),
         centerTitle: true,
         leading: IconButton(
