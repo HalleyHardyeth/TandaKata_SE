@@ -203,7 +203,7 @@ class _HomeBodyState extends State<HomeBody> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            const FlashcardScreen(), // ganti dengan nama file yang sesuai
+                            const FlashcardPage(), // ganti dengan nama file yang sesuai
                       ),
                     );
                   },
