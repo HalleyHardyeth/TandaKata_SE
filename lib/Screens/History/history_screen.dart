@@ -1,88 +1,85 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tanda_kata/Screens/History/history_store.dart';
+import 'package:tanda_kata/Screens/History/user_session.dart';
 import 'package:tanda_kata/Screens/Home/home.dart';
-import 'package:tanda_kata/Screens/Profile/profile_screen.dart';
-import 'package:tanda_kata/Screens/components/home_body.dart';
+import 'package:tanda_kata/color.dart';
 
-class HistoryScreen extends StatefulWidget {
+class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
 
   @override
-  State<HistoryScreen> createState() => _HistoryScreenState();
-}
-
-class _HistoryScreenState extends State<HistoryScreen> {
-  final int _currIdx = 1;
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          const Center(
-            child: Text(
-              'History Page',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ),
+    final userId = UserSession().userId ?? "guest";
+    final historyItems = HistoryStore.getHistory(userId);
 
-          // Bottom Navigation
-          Positioned(
-            left: 20,
-            right: 20,
-            bottom: 20,
-            child: Container(
-              height: 60,
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => const Home()));
+          },
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+        ),
+        title: Text(
+          'Learning History',
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: ListView.builder(
+          itemCount: historyItems.length,
+          itemBuilder: (context, index) {
+            final item = historyItems[index];
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFF2D8374),
-                borderRadius: BorderRadius.circular(40),
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.home,
-                      color: _currIdx == 0 ? Colors.white : Colors.grey,
-                      size: 30,
+                  Container(
+                    width: 100,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      color: grey,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    onPressed: () {
-                      if (_currIdx != 0) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Home()),
-                        );
-                      }
-                    },
+                    child: item.imagePath.isNotEmpty
+                        ? Image.network(item.imagePath, fit: BoxFit.cover)
+                        : const SizedBox(),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.history,
-                      color: _currIdx == 1 ? Colors.white : Colors.grey,
-                      size: 30,
+                  const SizedBox(width: 12),
+                  SizedBox(
+                    width: 230,
+                    height: 80,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            item.title,
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.person,
-                      color: _currIdx == 2 ? Colors.white : Colors.grey,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      if (_currIdx != 2) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ProfileScreen()),
-                        );
-                      }
-                    },
-                  ),
+                  )
                 ],
               ),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
