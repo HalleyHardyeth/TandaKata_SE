@@ -187,6 +187,9 @@ class _StudymaterialScreenState extends State<StudymaterialScreen> {
                 );
               },
             ),
+            actions: [
+              IconButton(onPressed: (){}, icon: const Icon(Icons.history))
+            ],
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
