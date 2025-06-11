@@ -65,7 +65,7 @@ class HistoryScreen extends StatelessWidget {
                         Flexible(
                           child: Text(
                             item.title,
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                               fontSize: 13,
