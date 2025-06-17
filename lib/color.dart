@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const primaryColor = Color(0xFF327B74);
+const softGreen = Color(0xFFD2E3E1);
 const primary31 = Color.fromARGB(60, 50, 123, 116);
 const secondaryColor = Color(0xFFFF9D01);
 const highlighted = Color(0xFFF5B025);

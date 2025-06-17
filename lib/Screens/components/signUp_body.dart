@@ -61,6 +61,7 @@ class _SignupBodyState extends State<SignupBody> {
         'userId': userId,
         'username': username,
         'email': email,
+        'social_media': '',
         'createdAt': Timestamp.now(),
       });
 
