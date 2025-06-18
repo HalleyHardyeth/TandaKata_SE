@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tanda_kata/Screens/Welcome/welcome_screen.dart';
+import 'package:tanda_kata/Screens/components/welcome_body.dart';
 import 'package:tanda_kata/color.dart';
 
 void main() async {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Auth',
       theme:
           ThemeData(primaryColor: primaryColor, scaffoldBackgroundColor: card),
-      home: const WelcomeScreen(),
+      home: const WelcomeBody(),
     );
   }
 }
