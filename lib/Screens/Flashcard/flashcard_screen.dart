@@ -1,13 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tanda_kata/data/flashcard_data.dart';
 
 class FlashcardModel {
   final String imageUrl;
   final String answer;
 
   FlashcardModel({required this.imageUrl, required this.answer});
+
+  factory FlashcardModel.fromMap(Map<String, dynamic> data) {
+    return FlashcardModel(
+      imageUrl: data['imageUrl'] ?? '',
+      answer: data['answer'] ?? '',
+    );
+  }
 }
 
 class FlashcardPage extends StatefulWidget {
@@ -18,41 +25,65 @@ class FlashcardPage extends StatefulWidget {
 }
 
 class _FlashcardPageState extends State<FlashcardPage> {
-  late final List<FlashcardModel> flashcards;
-  int currentIndex = 0;
   final GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
+  List<FlashcardModel> flashcards = [];
+  int currentIndex = 0;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    flashcards = flashcardData
-        .where((item) => item['imageUrl'] != null && item['answer'] != null)
-        .map((item) => FlashcardModel(
-              imageUrl: item['imageUrl'] ?? '',
-              answer: item['answer'] ?? '',
-            ))
-        .toList();
-    // Optional: Shuffle the flashcards
+    fetchFlashcards();
+  }
+
+  Future<void> fetchFlashcards() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('flashcards')
+          .get();
+
+      final cards = snapshot.docs
+          .map((doc) => FlashcardModel.fromMap(doc.data()))
+          .toList();
+
+      setState(() {
+        flashcards = cards;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('⚠️ Error fetching flashcards: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   void nextCard() {
     setState(() {
-      if (currentIndex < flashcards.length - 1) {
-        currentIndex++;
-      }
+      if (currentIndex < flashcards.length - 1) currentIndex++;
     });
   }
 
   void prevCard() {
     setState(() {
-      if (currentIndex > 0) {
-        currentIndex--;
-      }
+      if (currentIndex > 0) currentIndex--;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (flashcards.isEmpty) {
+      return const Scaffold(
+        body: Center(child: Text("No flashcards found.")),
+      );
+    }
+
     final flashcard = flashcards[currentIndex];
 
     return Scaffold(
@@ -61,16 +92,12 @@ class _FlashcardPageState extends State<FlashcardPage> {
         child: Column(
           children: [
             const SizedBox(height: 24),
-            Text(
+            const Text(
               'Alphabet',
-              style: const TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${currentIndex + 1} out of ${flashcards.length}',
+              '${currentIndex + 1} of ${flashcards.length}',
               style: const TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 30),
@@ -85,13 +112,10 @@ class _FlashcardPageState extends State<FlashcardPage> {
               ),
             ),
             const SizedBox(height: 20),
-            Text(
+            const Text(
               'Tap to see the answer!',
               style: TextStyle(
-                fontSize: 14,
-                fontStyle: FontStyle.italic,
-                color: Colors.black45,
-              ),
+                  fontSize: 14, fontStyle: FontStyle.italic, color: Colors.black45),
             ),
             const Spacer(),
             Padding(
@@ -133,20 +157,11 @@ class _FlashcardPageState extends State<FlashcardPage> {
         ],
       ),
       padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Image.network(
-              card.imageUrl,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) => const Icon(
-                  Icons.broken_image,
-                  size: 100,
-                  color: Colors.white),
-            ),
-          ),
-        ],
+      child: Image.network(
+        card.imageUrl,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) =>
+            const Icon(Icons.broken_image, size: 100, color: Colors.white),
       ),
     );
   }
