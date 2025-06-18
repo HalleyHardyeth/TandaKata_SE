@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tanda_kata/Screens/History/history_item.dart';
 import 'package:tanda_kata/Screens/History/history_store.dart';
 import 'package:tanda_kata/Screens/History/user_session.dart';
@@ -16,121 +17,72 @@ class _StudymaterialScreenState extends State<StudymaterialScreen> {
   late YoutubePlayerController _controller;
   late String currentTitle;
   late String currentVideoId;
-
-  final List<Map<String, String>> videos = [
-    {
-      "title":
-          "Mengenal Sistem Isyarat Bahasa Indonesia (SIBI - BISINDO ?) | Belajar Isyarat Part #1",
-      "url": "https://www.youtube.com/watch?v=4DZnZv3weBw",
-      "videoId": "4DZnZv3weBw",
-      "duration": "16:51"
-    },
-    {
-      "title":
-          "Alfabet - ABJAD dalam SIBI [Sistem Isyarat Bahasa Indonesia] | Belajar Isyarat Part #2",
-      "url": "https://www.youtube.com/watch?v=QUxNzUiWvAY",
-      "videoId": "QUxNzUiWvAY",
-      "duration": "12:31"
-    },
-    {
-      "title":
-          "Angka - Bilangan dan Operasi Hitung dalam SIBI | Belajar Isyarat Part #3",
-      "url": "https://www.youtube.com/watch?v=h681dhezQyw",
-      "videoId": "h681dhezQyw",
-      "duration": "13:21"
-    },
-    {
-      "title":
-          "Kata Ganti Orang | Belajar SIBI Sistem Isyarat Bahasa Indonesia #4",
-      "url": "https://www.youtube.com/watch?v=P683FVLH-2o",
-      "videoId": "P683FVLH-2o",
-      "duration": "2:19"
-    },
-    {
-      "title":
-          "Bertanya dengan SIBI - Sistem Isyarat Bahasa Indonesia | Belajar Part #5",
-      "url": "https://www.youtube.com/watch?v=TuQj8aFOcgs",
-      "videoId": "TuQj8aFOcgs",
-      "duration": "2:04"
-    },
-    {
-      "title": "SALAM DALAM SIBI (Greetings) | Belajar Isyarat Part #6",
-      "url": "https://www.youtube.com/watch?v=h4hy75JWBdE",
-      "videoId": "h4hy75JWBdE",
-      "duration": "7:57"
-    },
-    {
-      "title":
-          "Kata-kata CINTA dalam SIBI [Sistem Isyarat Bahasa Indonesia] | Belajar Isyarat Part #7",
-      "url": "https://www.youtube.com/watch?v=7CAjxgZpPUU",
-      "videoId": "7CAjxgZpPUU",
-      "duration": "6:47"
-    },
-    {
-      "title":
-          "Isyarat Hari-hari dalam SIBI - [ Senin sampai Minggu !! ] | Belajar Isyarat Part #8",
-      "url": "https://www.youtube.com/watch?v=9A8sVFdMxcA",
-      "videoId": "9A8sVFdMxcA",
-      "duration": "10:17"
-    },
-    {
-      "title":
-          "Kata-kata IBADAH dalam SIBI [Puasa, Sholat dll] | Belajar Isyarat Part #9",
-      "url": "https://www.youtube.com/watch?v=pbVDNa4WLlQ",
-      "videoId": "pbVDNa4WLlQ",
-      "duration": "13:35"
-    },
-    {
-      "title": "Kata Medis / Kedokteran dalam SIBI | Belajar Isyarat Part #10",
-      "url": "https://www.youtube.com/watch?v=QYHY0sq1mcM",
-      "videoId": "QYHY0sq1mcM",
-      "duration": "7:38"
-    },
-  ];
+  List<Map<String, dynamic>> videos = [];
 
   @override
   void initState() {
     super.initState();
-    final firstVideo = videos[0];
-    currentTitle = firstVideo["title"]!;
-    currentVideoId = firstVideo["videoId"]!;
-    _initPlayer(firstVideo["videoId"]!);
-    _addToHistory(firstVideo);
+    fetchVideos();
   }
 
-  void _initPlayer(String url) {
-    final videoID = YoutubePlayer.convertUrlToId(url)!;
+  Future<void> fetchVideos() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('local_videos')
+          .orderBy('createdAt', descending: false)
+          .get();
+
+      final fetchedVideos = snapshot.docs.map((doc) => doc.data()).toList();
+
+      if (fetchedVideos.isNotEmpty) {
+        final firstVideo = fetchedVideos[0];
+        setState(() {
+          videos = List<Map<String, dynamic>>.from(fetchedVideos);
+          currentTitle = firstVideo['title'];
+          currentVideoId = firstVideo['videoId'];
+          _initPlayer(firstVideo['videoId']);
+        });
+        _addToHistory(firstVideo);
+      }
+    } catch (e) {
+      print('Failed to fetch videos: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to fetch videos from Firestore')),
+      );
+    }
+  }
+
+  void _initPlayer(String videoId) {
     _controller = YoutubePlayerController(
-      initialVideoId: videoID,
+      initialVideoId: videoId,
       flags: const YoutubePlayerFlags(autoPlay: true),
     );
   }
 
-  void _changeVideo(String url) {
-    final newVideoId = YoutubePlayer.convertUrlToId(url);
-    if (newVideoId != null && newVideoId != _controller.metadata.videoId) {
+  void _changeVideo(String videoId) {
+    if (videoId != _controller.metadata.videoId) {
       setState(() {
-        _controller.load(newVideoId);
-        currentTitle =
-            videos.firstWhere((video) => video["url"] == url)["title"]!;
+        _controller.load(videoId);
+        currentTitle = videos.firstWhere((video) => video["videoId"] == videoId)["title"];
+        currentVideoId = videoId;
       });
-      final clickedVideo = videos.firstWhere((video) => video["url"] == url);
+      final clickedVideo = videos.firstWhere((video) => video["videoId"] == videoId);
       _addToHistory(clickedVideo);
     }
   }
 
-  void _addToHistory(Map<String, String> video) {
+  void _addToHistory(Map<String, dynamic> video) {
     final userId = UserSession().userId ?? "guest";
     final item = HistoryItem(
-      title: video["title"]!,
+      title: video["title"],
       imagePath: "https://img.youtube.com/vi/${video["videoId"]}/0.jpg",
     );
     HistoryStore.addHistory(userId, item);
   }
 
-  Widget _buildVideoCard(Map<String, String> video) {
+  Widget _buildVideoCard(Map<String, dynamic> video) {
     return GestureDetector(
-      onTap: () => _changeVideo(video["url"]!),
+      onTap: () => _changeVideo(video["videoId"]),
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(12),
@@ -154,10 +106,10 @@ class _StudymaterialScreenState extends State<StudymaterialScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(video["title"]!,
+                  Text(video["title"],
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4),
-                  Text(video["duration"]!),
+                  Text(video["duration"]),
                 ],
               ),
             ),
@@ -208,29 +160,31 @@ class _StudymaterialScreenState extends State<StudymaterialScreen> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: player,
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  currentTitle,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: videos.length,
-                    itemBuilder: (context, index) {
-                      return _buildVideoCard(videos[index]);
-                    },
+            child: videos.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: player,
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        currentTitle,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 20),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: videos.length,
+                          itemBuilder: (context, index) {
+                            return _buildVideoCard(videos[index]);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           ),
         );
       },
