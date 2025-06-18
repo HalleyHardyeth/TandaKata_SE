@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flip_card: ^0.7.0
+  file_picker: ^6.1.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -42,6 +44,8 @@ dependencies:
   firebase_core: ^3.13.1
   cloud_firestore: ^5.6.8
   firebase_auth: ^5.5.4
+  firebase_storage: ^12.4.6
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
