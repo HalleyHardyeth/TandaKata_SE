@@ -12,7 +12,7 @@ class FlashcardModel {
   factory FlashcardModel.fromMap(Map<String, dynamic> data) {
     return FlashcardModel(
       imageUrl: data['imageUrl'] ?? '',
-      answer: data['answer'] ?? '',
+      answer: data['answerk'] ?? '',
     );
   }
 }
